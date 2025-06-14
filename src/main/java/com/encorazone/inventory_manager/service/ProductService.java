@@ -1,6 +1,6 @@
 package com.encorazone.inventory_manager.service;
 
-import com.encorazone.inventory_manager.repository.Product;
+import com.encorazone.inventory_manager.domain.Product;
 
 import java.util.List;
 import java.util.Optional;
