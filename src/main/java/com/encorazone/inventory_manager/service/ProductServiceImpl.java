@@ -1,6 +1,6 @@
 package com.encorazone.inventory_manager.service;
 
-import com.encorazone.inventory_manager.domain.Product;
+import com.encorazone.inventory_manager.repository.Product;
 import com.encorazone.inventory_manager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
