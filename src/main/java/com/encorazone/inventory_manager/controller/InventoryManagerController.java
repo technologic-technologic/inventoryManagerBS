@@ -5,7 +5,9 @@ import com.encorazone.inventory_manager.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.UUID;
 
 //@Controller
 @RestController
@@ -30,21 +32,21 @@ final class InventoryManagerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> update(@PathVariable UUID id, @RequestBody Product product) {
         return productService.update(id, product)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{id}/outofstock")
-    public ResponseEntity<Product> markOutOfStock(@PathVariable Long id) {
+    public ResponseEntity<Product> markOutOfStock(@PathVariable UUID id) {
         return productService.markOutOfStock(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}/instock")
-    public ResponseEntity<Product> restoreStock(@PathVariable Long id) {
+    public ResponseEntity<Product> restoreStock(@PathVariable UUID id) {
         return productService.restoreStock(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

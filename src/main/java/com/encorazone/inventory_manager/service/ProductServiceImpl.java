@@ -5,8 +5,10 @@ import com.encorazone.inventory_manager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> update(Long id, Product newProduct) {
+    public Optional<Product> update(UUID id, Product newProduct) {
         return productRepository.findById(id).map(existing -> {
             existing.setName(newProduct.getName());
             existing.setCategory(newProduct.getCategory());
@@ -38,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> markOutOfStock(Long id) {
+    public Optional<Product> markOutOfStock(UUID id) {
         return productRepository.findById(id).map(product -> {
             product.setQuantityInStock(0);
             return productRepository.save(product);
@@ -46,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> restoreStock(Long id) {
+    public Optional<Product> restoreStock(UUID id) {
         return productRepository.findById(id).map(product -> {
             product.setQuantityInStock(10); // Default restore value
             return productRepository.save(product);
