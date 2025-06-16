@@ -1,9 +1,14 @@
 package com.encorazone.inventory_manager.service;
 
 import com.encorazone.inventory_manager.domain.Product;
+import com.encorazone.inventory_manager.domain.ProductFilter;
 import com.encorazone.inventory_manager.repository.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAll(String filter, String sort, int page, int size) {
-        // Simplified: no filter/sort logic, just pagination
+    public List<Product> getAll(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size)).getContent();
     }
 
@@ -34,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
             existing.setCategory(newProduct.getCategory());
             existing.setUnitPrice(newProduct.getUnitPrice());
             existing.setExpirationDate(newProduct.getExpirationDate());
-            existing.setQuantityInStock(newProduct.getQuantityInStock());
+            existing.setStockQuantity(newProduct.getStockQuantity());
             return productRepository.save(existing);
         });
     }
@@ -42,16 +46,28 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> markOutOfStock(UUID id) {
         return productRepository.findById(id).map(product -> {
-            product.setQuantityInStock(0);
+            product.setStockQuantity(0);
             return productRepository.save(product);
         });
     }
 
     @Override
-    public Optional<Product> restoreStock(UUID id) {
+    public Optional<Product> restoreStock(UUID id, Integer stock) {
         return productRepository.findById(id).map(product -> {
-            product.setQuantityInStock(10); // Default restore value
+            product.setStockQuantity(10);
             return productRepository.save(product);
         });
     }
+
+    @Override
+    public List<Product> findByNameAndCategoryAndStockQuantity(String name, String category,
+                                                               Integer stockQuantity, Pageable pageable) {
+        Specification<Product> spec = ProductFilter.nameContains(name)
+                .and(ProductFilter.categoryContains(category))
+                .and(ProductFilter.quantityEquals(stockQuantity));
+
+        Page<Product> page = productRepository.findAll(spec, pageable);
+        return page.getContent();
+    }
+
 }

@@ -28,8 +28,8 @@ public class Product {
     @Column(name = "EXPIRATION_DATE")
     private LocalDate expirationDate;
 
-    @Column(nullable = false, name = "QUANTITY_IN_STOCK")
-    private Integer quantityInStock;
+    @Column(nullable = false, name = "STOCK_QUANTITY")
+    private Integer stockQuantity;
 
     @Column(updatable = false, name = "CREATION_DATE")
     private LocalDateTime creationDate;
@@ -88,12 +88,12 @@ public class Product {
         this.expirationDate = expirationDate;
     }
 
-    public Integer getQuantityInStock() {
-        return quantityInStock;
+    public Integer getStockQuantity() {
+        return stockQuantity;
     }
 
-    public void setQuantityInStock(Integer quantityInStock) {
-        this.quantityInStock = quantityInStock;
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public LocalDateTime getCreationDate() {
