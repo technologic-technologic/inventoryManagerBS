@@ -109,4 +109,16 @@ final class InventoryManagerController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    /**
+     * Endpoint to delete products
+     *
+     * @param id Represemts tje id of the element to be deleted
+     * @return status code
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

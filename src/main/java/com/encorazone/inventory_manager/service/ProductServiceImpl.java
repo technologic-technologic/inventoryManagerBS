@@ -44,6 +44,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void delete(UUID id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+        } else {
+            throw new NoSuchElementException("Id " + id + "not found in db");
+        }
+    }
+
+    @Override
     public Optional<Product> markOutOfStock(UUID id) {
         return productRepository.findById(id).map(product -> {
             product.setStockQuantity(0);
