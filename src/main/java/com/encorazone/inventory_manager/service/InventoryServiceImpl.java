@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,6 +85,11 @@ public class InventoryServiceImpl implements InventoryService {
 
         Page<Product> page = productRepository.findAll(spec, pageable);
         return ProductMapper.toProductListResponse(page.getContent(), page.getTotalPages());
+    }
+
+    @Override
+    public Optional<List<String>> fetchCategories(){
+        return productRepository.findDistinctCategories();
     }
 
 }

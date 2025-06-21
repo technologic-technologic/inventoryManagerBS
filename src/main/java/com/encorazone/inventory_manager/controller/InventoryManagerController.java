@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -121,5 +122,17 @@ final class InventoryManagerController {
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         inventoryService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Endpoint to retrieve categories
+     *
+     * @return list with the categories
+     */
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> fetchCategories() {
+        return inventoryService.fetchCategories()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

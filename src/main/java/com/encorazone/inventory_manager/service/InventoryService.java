@@ -6,6 +6,7 @@ import com.encorazone.inventory_manager.domain.ProductListResponse;
 import com.encorazone.inventory_manager.domain.ProductShortResponse;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -74,4 +75,11 @@ public interface InventoryService {
      */
     ProductListResponse findByNameAndCategoryAndStockQuantity(String name, String category,
                                                               Integer stockQuantity, Pageable pageable);
+
+    /**
+     * Method to retrieve categories
+     *
+     * @return a list with the categories
+     */
+    Optional<List<String>> fetchCategories();
 }
