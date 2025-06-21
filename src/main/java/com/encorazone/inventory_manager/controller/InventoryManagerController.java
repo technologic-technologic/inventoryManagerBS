@@ -1,6 +1,7 @@
 package com.encorazone.inventory_manager.controller;
 
 import com.encorazone.inventory_manager.domain.Product;
+import com.encorazone.inventory_manager.domain.ProductResponse;
 import com.encorazone.inventory_manager.service.ProductService;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -63,7 +64,7 @@ final class InventoryManagerController {
      * @return status. Example 200(OK)
      */
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product) {
+    public ResponseEntity<ProductResponse> create(@RequestBody Product product) {
         return ResponseEntity.ok(productService.create(product));
     }
 
@@ -76,7 +77,7 @@ final class InventoryManagerController {
      * @return status. Example 500 (Internal server error)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable UUID id, @RequestBody Product product) {
+    public ResponseEntity<ProductResponse> update(@PathVariable UUID id, @RequestBody Product product) {
         return productService.update(id, product)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -89,7 +90,7 @@ final class InventoryManagerController {
      * @return status. Example 200
      */
     @PatchMapping("/{id}/outofstock")
-    public ResponseEntity<Product> markOutOfStock(@PathVariable UUID id) {
+    public ResponseEntity<ProductResponse> markOutOfStock(@PathVariable UUID id) {
         return productService.markOutOfStock(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -103,9 +104,9 @@ final class InventoryManagerController {
      * @return status. Example 200(OK)
      */
     @PatchMapping("/{id}/instock")
-    public ResponseEntity<Product> restoreStock(@PathVariable UUID id,
+    public ResponseEntity<ProductResponse> restoreStock(@PathVariable UUID id,
                                                 @RequestParam(defaultValue = "10") Integer stockQuantity) {
-        return productService.restoreStock(id, stockQuantity)
+        return productService.updateStock(id, stockQuantity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

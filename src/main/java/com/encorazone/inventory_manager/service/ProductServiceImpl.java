@@ -1,8 +1,9 @@
 package com.encorazone.inventory_manager.service;
 
 import com.encorazone.inventory_manager.domain.Product;
-import com.encorazone.inventory_manager.domain.ProductFilter;
+import com.encorazone.inventory_manager.domain.ProductResponse;
 import com.encorazone.inventory_manager.repository.ProductRepository;
+import com.encorazone.inventory_manager.mapper.ProductMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,12 +29,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product create(Product product) {
-        return productRepository.save(product);
+    public ProductResponse create(Product product) {
+        return ProductMapper.toProductResponse(productRepository.save(product));
     }
 
     @Override
-    public Optional<Product> update(UUID id, Product newProduct) {
+    public Optional<ProductResponse> update(UUID id, Product newProduct) {
         return productRepository.findById(id).map(existing -> {
             existing.setName(newProduct.getName());
             existing.setCategory(newProduct.getCategory());
@@ -40,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
             existing.setExpirationDate(newProduct.getExpirationDate());
             existing.setStockQuantity(newProduct.getStockQuantity());
             return productRepository.save(existing);
-        });
+        }).map(ProductMapper::toProductResponse);
     }
 
     @Override
@@ -53,19 +55,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> markOutOfStock(UUID id) {
+    public Optional<ProductResponse> markOutOfStock(UUID id) {
         return productRepository.findById(id).map(product -> {
-            product.setStockQuantity(0);
-            return productRepository.save(product);
-        });
+            if (product.getStockQuantity() > 0) {
+                product.setStockQuantity(0);
+                return productRepository.save(product);
+            } else {
+                return product;
+            }
+        }).map(ProductMapper::toProductResponse);
     }
 
     @Override
-    public Optional<Product> restoreStock(UUID id, Integer stock) {
+    public Optional<ProductResponse> updateStock(UUID id, Integer stock) {
         return productRepository.findById(id).map(product -> {
-            product.setStockQuantity(10);
+            product.setStockQuantity(stock);
             return productRepository.save(product);
-        });
+        }).map(ProductMapper::toProductResponse);
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.encorazone.inventory_manager.domain;
+package com.encorazone.inventory_manager.service;
 
+import com.encorazone.inventory_manager.domain.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductFilter {
@@ -29,14 +30,21 @@ public class ProductFilter {
     }
 
     /**
-     * Creates a specification for filtering products that have exactly the specified stock quantity.
+     * Creates a specification for filtering the availability of the products.
      *
-     * @param stock the stock quantity to match; if null, no filter is applied
-     * @return a spec for matching stock quantities, or a null if the input is {@code null}
+     * @param stock the stock quantity parameter:
+     *              0 -> don't filter, 1 -> only in stock, 2 -> Not in stock, 3 -> to reset status
+     * @return a spec for matching stock quantities, or a null if the input is null
      */
     public static Specification<Product> quantityEquals(Integer stock) {
-        return (root, query, cb) ->
-                stock == null ? null :
-                        cb.equal(root.get("stockQuantity"), stock);
+        return switch (stock) {
+            case 0, 3 -> (root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("stockQuantity"), 0);
+            case 1 -> (root, query, cb) ->
+                    cb.greaterThan(root.get("stockQuantity"), 0);
+            case 2 -> (root, query, cb) ->
+                    cb.equal(root.get("stockQuantity"), 0);
+            default -> null;
+        };
     }
 }
