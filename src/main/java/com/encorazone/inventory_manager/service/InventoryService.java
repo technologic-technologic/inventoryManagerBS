@@ -2,14 +2,14 @@ package com.encorazone.inventory_manager.service;
 
 import com.encorazone.inventory_manager.domain.Product;
 
-import com.encorazone.inventory_manager.domain.ProductResponse;
+import com.encorazone.inventory_manager.domain.ProductListResponse;
+import com.encorazone.inventory_manager.domain.ProductShortResponse;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ProductService {
+public interface InventoryService {
 
     /**
      * method to get all the elemnts from database, no sorting nor filtering
@@ -19,7 +19,7 @@ public interface ProductService {
      * @param size represents the number of elements per page, default is 10. Example 20.
      * @return a list containing the pagexsize elements
      */
-    List<Product> getAll(int page, int size);
+    ProductListResponse getAll(int page, int size);
 
     /**
      * Method to create a new product and save it
@@ -27,7 +27,7 @@ public interface ProductService {
      * @param product object representing the product to be added to the inventory
      * @return the product creeated
      */
-    ProductResponse create(Product product);
+    ProductShortResponse create(Product product);
 
     /**
      * Updates an existing product identified by the given ID.
@@ -36,7 +36,7 @@ public interface ProductService {
      * @param product the updated product data
      * @return an Optional containing the updated product if found, or empty if not found
      */
-    Optional<ProductResponse> update(UUID id, Product product);
+    Optional<ProductShortResponse> update(UUID id, Product product);
 
     /**
      * Method to delet product
@@ -51,7 +51,7 @@ public interface ProductService {
      * @param id Represents the id of the element we want the stock to be 0
      * @return an optional containing the updated product if the operation succeeded, or empty if not found
      */
-    Optional<ProductResponse> markOutOfStock(UUID id);
+    Optional<ProductShortResponse> markOutOfStock(UUID id);
 
     /**
      * method to automatically set stock to the given number
@@ -60,7 +60,7 @@ public interface ProductService {
      * @param stock Represents the amount to put into stock. Example 10
      * @return n optional containing the updated product if the operation succeeded, or empty if not found
      */
-    Optional<ProductResponse> updateStock(UUID id, Integer stock);
+    Optional<ProductShortResponse> updateStock(UUID id, Integer stock);
 
     /**
      * Endpoint for filtered data retrieving, including name, category and availability
@@ -72,6 +72,6 @@ public interface ProductService {
      * @param pageable      Builtin object for sorting and pagination, the API asks for the json by itself
      * @return a list of products matching the criteria
      */
-    List<Product> findByNameAndCategoryAndStockQuantity(String name, String category,
-                                                        Integer stockQuantity, Pageable pageable);
+    ProductListResponse findByNameAndCategoryAndStockQuantity(String name, String category,
+                                                              Integer stockQuantity, Pageable pageable);
 }

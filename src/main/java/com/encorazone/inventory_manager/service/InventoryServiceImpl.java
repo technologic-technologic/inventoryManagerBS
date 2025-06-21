@@ -1,7 +1,8 @@
 package com.encorazone.inventory_manager.service;
 
 import com.encorazone.inventory_manager.domain.Product;
-import com.encorazone.inventory_manager.domain.ProductResponse;
+import com.encorazone.inventory_manager.domain.ProductListResponse;
+import com.encorazone.inventory_manager.domain.ProductShortResponse;
 import com.encorazone.inventory_manager.repository.ProductRepository;
 import com.encorazone.inventory_manager.mapper.ProductMapper;
 
@@ -12,29 +13,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class InventoryServiceImpl implements InventoryService {
 
     @Autowired
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAll(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page, size)).getContent();
+    public ProductListResponse getAll(int page, int size) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, size));
+        return ProductMapper.toProductListResponse(products.getContent(),products.getTotalPages());
     }
 
     @Override
-    public ProductResponse create(Product product) {
-        return ProductMapper.toProductResponse(productRepository.save(product));
+    public ProductShortResponse create(Product product) {
+        return ProductMapper.toProductShortResponse(productRepository.save(product));
     }
 
     @Override
-    public Optional<ProductResponse> update(UUID id, Product newProduct) {
+    public Optional<ProductShortResponse> update(UUID id, Product newProduct) {
         return productRepository.findById(id).map(existing -> {
             existing.setName(newProduct.getName());
             existing.setCategory(newProduct.getCategory());
@@ -42,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
             existing.setExpirationDate(newProduct.getExpirationDate());
             existing.setStockQuantity(newProduct.getStockQuantity());
             return productRepository.save(existing);
-        }).map(ProductMapper::toProductResponse);
+        }).map(ProductMapper::toProductShortResponse);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductResponse> markOutOfStock(UUID id) {
+    public Optional<ProductShortResponse> markOutOfStock(UUID id) {
         return productRepository.findById(id).map(product -> {
             if (product.getStockQuantity() > 0) {
                 product.setStockQuantity(0);
@@ -63,26 +64,26 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 return product;
             }
-        }).map(ProductMapper::toProductResponse);
+        }).map(ProductMapper::toProductShortResponse);
     }
 
     @Override
-    public Optional<ProductResponse> updateStock(UUID id, Integer stock) {
+    public Optional<ProductShortResponse> updateStock(UUID id, Integer stock) {
         return productRepository.findById(id).map(product -> {
             product.setStockQuantity(stock);
             return productRepository.save(product);
-        }).map(ProductMapper::toProductResponse);
+        }).map(ProductMapper::toProductShortResponse);
     }
 
     @Override
-    public List<Product> findByNameAndCategoryAndStockQuantity(String name, String category,
-                                                               Integer stockQuantity, Pageable pageable) {
-        Specification<Product> spec = ProductFilter.nameContains(name)
-                .and(ProductFilter.categoryContains(category))
-                .and(ProductFilter.quantityEquals(stockQuantity));
+    public ProductListResponse findByNameAndCategoryAndStockQuantity(String name, String category,
+                                                                     Integer stockQuantity, Pageable pageable) {
+        Specification<Product> spec = InventoryProductsFilter.nameContains(name)
+                .and(InventoryProductsFilter.categoryContains(category))
+                .and(InventoryProductsFilter.quantityEquals(stockQuantity));
 
         Page<Product> page = productRepository.findAll(spec, pageable);
-        return page.getContent();
+        return ProductMapper.toProductListResponse(page.getContent(), page.getTotalPages());
     }
 
 }

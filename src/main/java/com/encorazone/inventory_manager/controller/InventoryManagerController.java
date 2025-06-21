@@ -1,8 +1,9 @@
 package com.encorazone.inventory_manager.controller;
 
 import com.encorazone.inventory_manager.domain.Product;
-import com.encorazone.inventory_manager.domain.ProductResponse;
-import com.encorazone.inventory_manager.service.ProductService;
+import com.encorazone.inventory_manager.domain.ProductListResponse;
+import com.encorazone.inventory_manager.domain.ProductShortResponse;
+import com.encorazone.inventory_manager.service.InventoryService;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -19,7 +19,7 @@ import java.util.UUID;
 final class InventoryManagerController {
 
     @Autowired
-    private ProductService productService;
+    private InventoryService inventoryService;
 
     /**
      * Edpoin to get all the elemnts from database, no sorting nor filtering
@@ -30,10 +30,10 @@ final class InventoryManagerController {
      * @return response status amd a list containing the pagexsize elements
      */
     @GetMapping
-    public ResponseEntity<List<Product>> getAll(
-            @RequestParam(required = false) int page,
+    public ResponseEntity<ProductListResponse> getAll(
+            @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
-        return ResponseEntity.ok(productService.getAll(page, size));
+        return ResponseEntity.ok(inventoryService.getAll(page, size));
     }
 
     /**
@@ -48,12 +48,12 @@ final class InventoryManagerController {
      * complying with the sort and filter parameters
      */
     @GetMapping("/filters")
-    public ResponseEntity<List<Product>> findByFilter(
+    public ResponseEntity<ProductListResponse> findByFilter(
             @ModelAttribute @RequestParam(required = false) String name,
             @ModelAttribute @RequestParam(required = false) String category,
-            @ModelAttribute @RequestParam(required = false) Integer stockQuantity,
+            @ModelAttribute @RequestParam(required = false, defaultValue = "0") Integer stockQuantity,
             @ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(productService.findByNameAndCategoryAndStockQuantity(
+        return ResponseEntity.ok(inventoryService.findByNameAndCategoryAndStockQuantity(
                 name, category, stockQuantity, pageable));
     }
 
@@ -64,8 +64,8 @@ final class InventoryManagerController {
      * @return status. Example 200(OK)
      */
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.create(product));
+    public ResponseEntity<ProductShortResponse> create(@RequestBody Product product) {
+        return ResponseEntity.ok(inventoryService.create(product));
     }
 
     /**
@@ -77,8 +77,8 @@ final class InventoryManagerController {
      * @return status. Example 500 (Internal server error)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> update(@PathVariable UUID id, @RequestBody Product product) {
-        return productService.update(id, product)
+    public ResponseEntity<ProductShortResponse> update(@PathVariable UUID id, @RequestBody Product product) {
+        return inventoryService.update(id, product)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -90,8 +90,8 @@ final class InventoryManagerController {
      * @return status. Example 200
      */
     @PatchMapping("/{id}/outofstock")
-    public ResponseEntity<ProductResponse> markOutOfStock(@PathVariable UUID id) {
-        return productService.markOutOfStock(id)
+    public ResponseEntity<ProductShortResponse> markOutOfStock(@PathVariable UUID id) {
+        return inventoryService.markOutOfStock(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -104,9 +104,9 @@ final class InventoryManagerController {
      * @return status. Example 200(OK)
      */
     @PatchMapping("/{id}/instock")
-    public ResponseEntity<ProductResponse> restoreStock(@PathVariable UUID id,
-                                                @RequestParam(defaultValue = "10") Integer stockQuantity) {
-        return productService.updateStock(id, stockQuantity)
+    public ResponseEntity<ProductShortResponse> restoreStock(@PathVariable UUID id,
+                                                             @RequestParam(defaultValue = "10") Integer stockQuantity) {
+        return inventoryService.updateStock(id, stockQuantity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -119,7 +119,7 @@ final class InventoryManagerController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
-        productService.delete(id);
+        inventoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

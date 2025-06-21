@@ -3,7 +3,7 @@ package com.encorazone.inventory_manager.service;
 import com.encorazone.inventory_manager.domain.Product;
 import org.springframework.data.jpa.domain.Specification;
 
-public class ProductFilter {
+public class InventoryProductsFilter {
 
     /**
      * Creates a specification for filtering products whose names contain the given substring,
