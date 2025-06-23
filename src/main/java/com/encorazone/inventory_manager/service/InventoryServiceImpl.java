@@ -1,5 +1,6 @@
 package com.encorazone.inventory_manager.service;
 
+import com.encorazone.inventory_manager.domain.InventorySummaryResponse;
 import com.encorazone.inventory_manager.domain.Product;
 import com.encorazone.inventory_manager.domain.ProductListResponse;
 import com.encorazone.inventory_manager.domain.ProductShortResponse;
@@ -90,6 +91,11 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public Optional<List<String>> fetchCategories(){
         return productRepository.findDistinctCategories();
+    }
+
+    @Override
+    public Optional<List<InventorySummaryResponse>> fetchInventorySummary(){
+        return Optional.ofNullable(ProductMapper.toInventorySummaryResponseList(productRepository.findCategoriesSummary()));
     }
 
 }

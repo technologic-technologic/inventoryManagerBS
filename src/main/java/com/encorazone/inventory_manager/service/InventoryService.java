@@ -4,6 +4,7 @@ import com.encorazone.inventory_manager.domain.Product;
 
 import com.encorazone.inventory_manager.domain.ProductListResponse;
 import com.encorazone.inventory_manager.domain.ProductShortResponse;
+import com.encorazone.inventory_manager.domain.InventorySummaryResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -82,4 +83,11 @@ public interface InventoryService {
      * @return a list with the categories
      */
     Optional<List<String>> fetchCategories();
+
+    /**
+     * Method to retrieve the inventory summary
+     *
+     * @return a list with the summary
+     */
+    Optional<List<InventorySummaryResponse>> fetchInventorySummary();
 }

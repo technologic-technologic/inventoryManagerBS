@@ -1,5 +1,6 @@
 package com.encorazone.inventory_manager.controller;
 
+import com.encorazone.inventory_manager.domain.InventorySummaryResponse;
 import com.encorazone.inventory_manager.domain.Product;
 import com.encorazone.inventory_manager.domain.ProductListResponse;
 import com.encorazone.inventory_manager.domain.ProductShortResponse;
@@ -132,6 +133,18 @@ final class InventoryManagerController {
     @GetMapping("/categories")
     public ResponseEntity<List<String>> fetchCategories() {
         return inventoryService.fetchCategories()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Endpoint to retrieve inventory summary
+     *
+     * @return list with the summary
+     */
+    @GetMapping("/summary")
+    public ResponseEntity<List<InventorySummaryResponse>> fetchSummary() {
+        return inventoryService.fetchInventorySummary()
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
