@@ -3,10 +3,16 @@ spring:
     name: inventory-manager-spark
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: '#INVENTORY'
-    password: admin
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:h2:mem:testdb
+    username: 'sa'
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
 
   jpa:
-    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
