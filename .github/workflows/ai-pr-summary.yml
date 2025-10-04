@@ -25,7 +25,6 @@ jobs:
           git diff $BASE $HEAD > pr.diff
           echo "path=pr.diff" >> $GITHUB_OUTPUT
 
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -114,11 +113,9 @@ jobs:
           pathlib.Path("summary.txt").write_text(text, encoding="utf-8")
           PY
 
-
       - name: Comment on PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: ai-pr-summary
           recreate: true
           path: summary.txt
-
