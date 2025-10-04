@@ -120,6 +120,5 @@ jobs:
         with:
           header: ai-pr-summary
           recreate: true
-          message: |
-            ## PR Summary
-            $(cat summary.txt)
+          path: summary.txt
+
