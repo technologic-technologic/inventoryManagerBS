@@ -1,5 +1,5 @@
 # InventoryManagerBC
-Breakable Toy 1 - Inventory Manager
+Breakable Toy 1 (Gen AI Augmented) - Inventory Manager
 
 # Inventory Management Application
 
@@ -57,10 +57,6 @@ This is a Spring Boot-based inventory management application designed to help ma
 | GET    | `/products/categories`      | Retrieves all the categories available                           |
 
 
-### Storage
-
-Currently, product data is stored in a local database using docker. 
-
 ---
 
 ##  Tech Stack
@@ -68,7 +64,7 @@ Currently, product data is stored in a local database using docker.
 - **Language:** Java
 - **Framework:** Spring Boot
 - **Build Tool:** Maven
-- **Data Storage:** Oracle DB
+- **Data Storage:** H2 local Runtime via JDBC
 
 ---
 
@@ -82,13 +78,5 @@ Currently, product data is stored in a local database using docker.
 ### Running the Application
 
 ```bash
-docker run -d \
---name oracle-xe \
--e ORACLE_PASSWORD=admin \
--p 1521:1521 \
--p 5500:5500 \
-oracle-xe-inventory-manager:1.0
-```
-```bash
-mvn spring-boot:run
+  mvn spring-boot:run
 ```
