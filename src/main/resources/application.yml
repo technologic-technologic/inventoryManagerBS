@@ -1,3 +1,6 @@
+server:
+  port: 9090
+
 spring:
   application:
     name: inventory-manager-spark
@@ -15,4 +18,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true

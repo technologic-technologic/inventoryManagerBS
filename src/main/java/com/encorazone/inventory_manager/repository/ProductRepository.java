@@ -15,8 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     @Query("SELECT DISTINCT p.category FROM Product p")
     Optional<List<String>> findDistinctCategories();
 
-    @Query("SELECT p.category AS category, COUNT(p) AS productsInStock, " +
-            "SUM(p.unitPrice) AS valueInStock, AVG(p.unitPrice) AS averageValue " +
+    @Query("SELECT p.category AS category, SUM(p.stockQuantity) AS productsInStock, " +
+            "SUM(p.unitPrice * p.stockQuantity) AS valueInStock, AVG(p.unitPrice) AS averageValue " +
             "FROM Product p GROUP BY p.category")
     List<InventorySummaryInterface> findCategoriesSummary();
 }
