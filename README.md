@@ -1,5 +1,5 @@
 # InventoryManagerBC
-Breakable Toy 1 - Inventory Manager
+Breakable Toy 1 (Gen AI Augmented) - Inventory Manager
 
 # Inventory Management Application
 
@@ -7,7 +7,7 @@ This is a Spring Boot-based inventory management application designed to help ma
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Product Management**
     - Create new products with name, category, quantity, unit price, and optional expiration date.
@@ -30,10 +30,10 @@ This is a Spring Boot-based inventory management application designed to help ma
 
 ---
 
-## 🧱 Technical Overview
+## Technical Overview
 
 ### Model: `Product`
-- `id` (Unique Identifier)
+- `id` (Unique Identifier. Auto-generated)
 - `name` (Required, max 120 characters)
 - `category` (Required)
 - `unitPrice` (Required)
@@ -44,30 +44,31 @@ This is a Spring Boot-based inventory management application designed to help ma
 
 ### API Endpoints
 
-| Method | Endpoint                        | Description                                       |
-|--------|----------------------------------|---------------------------------------------------|
-| GET    | `/products`                     | Retrieve products with filtering, sorting, and pagination |
-| POST   | `/products`                     | Create a new product                              |
-| PUT    | `/products/{id}`               | Update an existing product                        |
-| POST   | `/products/{id}/outofstock`    | Mark a product as out of stock                    |
-| PUT    | `/products/{id}/instock`       | Restore a product's stock                         |
+| Method | Endpoint                    | Description                                                      |
+|--------|-----------------------------|------------------------------------------------------------------|
+| GET    | `/products`                 | Retrieve products with pagination support                        |
+| POST   | `/products`                 | Create a new product                                             |
+| DELETE | `/products`                 | Delete a products                                                |
+| PUT    | `/products/{id}`            | Update an existing product                                       |
+| PATCH  | `/products/{id}/outofstock` | Mark a product as out of stock                                   |
+| PATCH  | `/products/{id}/instock`    | Restore a product's stock<br/>                                   |
+| GET    | `/products/summary`         | Retrieves inventory metrics                                      |
+| GET    | `/products/filters`         | Retrieves products based on filters, sort methods and pagination |
+| GET    | `/products/categories`      | Retrieves all the categories available                           |
 
-### Storage
-
-Currently, product data is stored in-memory using Java Collections. The application is designed to allow easy migration to a persistent storage layer in the future.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Language:** Java
 - **Framework:** Spring Boot
 - **Build Tool:** Maven
-- **Data Storage:** In-Memory (Java Collections)
+- **Data Storage:** H2 local Runtime via JDBC
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -77,4 +78,5 @@ Currently, product data is stored in-memory using Java Collections. The applicat
 ### Running the Application
 
 ```bash
-mvn spring-boot:run
+  mvn spring-boot:run
+```
