@@ -7,7 +7,7 @@ This is a Spring Boot-based inventory management application designed to help ma
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Product Management**
     - Create new products with name, category, quantity, unit price, and optional expiration date.
@@ -30,7 +30,7 @@ This is a Spring Boot-based inventory management application designed to help ma
 
 ---
 
-## 🧱 Technical Overview
+## Technical Overview
 
 ### Model: `Product`
 - `id` (Unique Identifier)
@@ -58,7 +58,7 @@ Currently, product data is stored in-memory using Java Collections. The applicat
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Language:** Java
 - **Framework:** Spring Boot
@@ -67,7 +67,7 @@ Currently, product data is stored in-memory using Java Collections. The applicat
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
