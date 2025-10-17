@@ -85,6 +85,19 @@ public class InventoryServiceImpl implements InventoryService {
                 .and(InventoryProductsFilter.quantityEquals(stockQuantity));
 
         Page<Product> page = productRepository.findAll(spec, pageable);
+        if (page.getContent().isEmpty()) {
+            List<Product> ref = productRepository.findAll(spec);
+            if (!ref.isEmpty()) {
+                if (ref.size()>= pageable.getPageSize()){
+                    return ProductMapper.toProductListResponse(
+                            ref.subList(
+                                    (ref.size() - pageable.getPageSize()),
+                                    (ref.size() - 1)),
+                            (int) Math.ceil((double) ref.size()/pageable.getPageSize()));
+                }
+                return ProductMapper.toProductListResponse(ref, 1);
+            }
+        }
         return ProductMapper.toProductListResponse(page.getContent(), page.getTotalPages());
     }
 
