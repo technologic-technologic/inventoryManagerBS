@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.5.6</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.encorazone</groupId>
@@ -27,12 +27,14 @@
 		<url/>
 	</scm>
 	<properties>
+		<logback.version>1.5.19</logback.version>
 		<java.version>17</java.version>
 		<ojdbc.version>21.3.0.0</ojdbc.version>
-		<springdoc.version>2.3.0</springdoc.version>
+		<springdoc.version>2.8.13</springdoc.version>
 		<lombok.version>1.18.38</lombok.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<maven-compiler.version>3.14.0</maven-compiler.version>
+		<commons-lang3.version>3.18.0</commons-lang3.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -87,11 +89,6 @@
 			<version>${lombok.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
@@ -127,10 +124,16 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
